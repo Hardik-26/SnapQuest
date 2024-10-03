@@ -8,14 +8,18 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 
 class SignupActivity : AppCompatActivity() {
-    private lateinit var loginLink : TextView
-    private lateinit var signupButton : Button
-    private lateinit var userName : EditText
-    private lateinit var password : EditText
-    private lateinit var confirmPassword : EditText
-    private lateinit var email : EditText
+    private lateinit var loginLink: TextView
+    private lateinit var signupButton: Button
+    private lateinit var userName: EditText
+    private lateinit var password: EditText
+    private lateinit var confirmPassword: EditText
+    private lateinit var email: EditText
+
+    private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,12 +33,12 @@ class SignupActivity : AppCompatActivity() {
         password = findViewById(R.id.password)
         confirmPassword = findViewById(R.id.confirmPassword)
 
-        loginLink.setOnClickListener() {
+        loginLink.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
 
-        signupButton.setOnClickListener() {
+        signupButton.setOnClickListener {
             val name = userName.text.toString().trim()
             val email = email.text.toString().trim()
             val password = password.text.toString().trim()
@@ -44,6 +48,44 @@ class SignupActivity : AppCompatActivity() {
                 Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
+            if (password != confirmPassword) {
+                Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Check if username already exists
+            db.collection("Users").document(name).get()
+                .addOnSuccessListener { documentSnapshot ->
+                    if (documentSnapshot.exists()) {
+
+                        Toast.makeText(this, "Username already exists", Toast.LENGTH_SHORT).show()
+                    } else {
+
+                        val user = hashMapOf(
+                            "username" to name,
+                            "email" to email,
+                            "password" to password,
+                            "points" to 0
+                        )
+
+                        // Add user to Firestore
+                        db.collection("Users").document(name)
+                            .set(user)
+                            .addOnSuccessListener {
+                                Toast.makeText(this, "Signup successful", Toast.LENGTH_SHORT).show()
+
+                                startActivity(Intent(this, LoginActivity::class.java))
+                                finish()
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(this, "Error signing up: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Error checking username: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
         }
     }
 }

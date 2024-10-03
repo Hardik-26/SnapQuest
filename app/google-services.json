@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "738371740534",
+    "project_id": "snapquest-0",
+    "storage_bucket": "snapquest-0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:738371740534:android:5920908747d09523149057",
+        "android_client_info": {
+          "package_name": "com.example.snapquest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCL1GxJEzVmYsodzt7HXjN7AiPyY-Jde2c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

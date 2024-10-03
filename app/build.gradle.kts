@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.google.gms.google-services")
+
 }
 
 android {
@@ -10,6 +12,7 @@ android {
     defaultConfig {
         applicationId = "com.example.snapquest"
         minSdk = 24
+        //noinspection OldTargetApi
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -42,7 +45,15 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.firebase.firestore.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    //noinspection UseTomlInstead
+    implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
+    //noinspection UseTomlInstead
+    implementation("com.google.firebase:firebase-analytics")
+    //noinspection GradleDependency,UseTomlInstead
+    implementation("com.google.firebase:firebase-auth:22.0.0")
+
 }
