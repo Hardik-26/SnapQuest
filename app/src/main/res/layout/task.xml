@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_snap_quest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="24dp"
+        android:fontFamily="@font/protest_guerrilla"
+        android:text="SnapQuest"
+        android:textColor="@color/black"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.088" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="184dp"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:padding="10dp"
+            android:text="Task :"
+            android:textColor="@color/primary"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/rounded_background"
+            android:padding="15dp"
+            android:text="Explore your local city by capturing iconic landmarks or hidden gems around you."
+            android:textSize="20sp"
+            android:textColor="@color/primary"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/click"
+        android:layout_width="118dp"
+        android:layout_height="86dp"
+        android:layout_gravity="center"
+        android:backgroundTint="#FFFFFF"
+        android:paddingHorizontal="30dp"
+        android:paddingVertical="20dp"
+        android:text="Click"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.738" />
+
+    <LinearLayout
+        android:id="@+id/bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
+        android:background="@drawable/bottom_bar_background"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <ImageButton
+            android:id="@+id/leaderboard"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="90dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/button_rounded"
+            android:padding="10dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/leaderboard" />
+
+        <ImageButton
+            android:id="@+id/home"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="90dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/button_rounded"
+            android:padding="10dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/home" />
+
+        <ImageButton
+            android:id="@+id/profile"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="90dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/button_rounded"
+            android:padding="10dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/profile" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
