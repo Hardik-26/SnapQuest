@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".Leaderboard">
+    tools:context=".LeaderboardActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginVertical="10dp"
+            android:layout_marginVertical="5dp"
             android:layout_marginHorizontal="20dp"
             android:background="@drawable/profile_background_box"
             android:padding="10dp">
@@ -43,10 +43,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:gravity="center"
-                android:text="Himanshi"
-                android:textColor="@color/black"
+                android:text="Himzy"
+                android:fontFamily="@font/alegreya_medium"
+                android:textColor="@color/primary"
                 android:textSize="30sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/points"
@@ -56,6 +57,8 @@
                 android:gravity="center"
                 android:padding="4dp"
                 android:text="267"
+                android:fontFamily="@font/alegreya_medium"
+                android:textColor="@color/primary"
                 android:textSize="30sp"
                 android:textStyle="bold"/>
 
@@ -64,7 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginVertical="10dp"
+            android:layout_marginVertical="5dp"
             android:layout_marginHorizontal="20dp"
             android:background="@drawable/profile_background_box"
             android:padding="10dp">
@@ -75,7 +78,8 @@
                 android:layout_weight="0.5"
                 android:gravity="center"
                 android:text="Hardik"
-                android:textColor="@color/black"
+                android:fontFamily="@font/alegreya_medium"
+                android:textColor="@color/primary"
                 android:textSize="30sp"
                 android:textStyle="bold"/>
 
@@ -86,6 +90,8 @@
                 android:gravity="center"
                 android:padding="4dp"
                 android:text="267"
+                android:fontFamily="@font/alegreya_medium"
+                android:textColor="@color/primary"
                 android:textSize="30sp"
                 android:textStyle="bold"/>
 
@@ -95,7 +101,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginVertical="10dp"
+            android:layout_marginVertical="5dp"
             android:layout_marginHorizontal="20dp"
             android:background="@drawable/profile_background_box"
             android:padding="10dp">
@@ -106,7 +112,8 @@
                 android:layout_weight="0.5"
                 android:gravity="center"
                 android:text="Sumit"
-                android:textColor="@color/black"
+                android:fontFamily="@font/alegreya_medium"
+                android:textColor="@color/primary"
                 android:textSize="30sp"
                 android:textStyle="bold"/>
 
@@ -117,6 +124,8 @@
                 android:gravity="center"
                 android:padding="4dp"
                 android:text="267"
+                android:fontFamily="@font/alegreya_medium"
+                android:textColor="@color/primary"
                 android:textSize="30sp"
                 android:textStyle="bold"/>
         </LinearLayout>
