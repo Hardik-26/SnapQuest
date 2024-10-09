@@ -40,6 +40,7 @@
         android:gravity="center"
         android:padding="20dp"
         android:text="SNAPQUEST"
+        android:textColor="@color/primary"
         android:fontFamily="@font/protest_guerrilla"
         android:textSize="50sp"
         app:layout_constraintStart_toStartOf="parent"

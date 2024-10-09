@@ -47,7 +47,6 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
-        // Check if username exists and validate the password
         db.collection("Users").document(name).get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
@@ -55,6 +54,8 @@ class LoginActivity : AppCompatActivity() {
 
                     if (storedPassword == pass) {
                         Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, ProfileActivity::class.java)
+                        startActivity(intent)
                     } else {
                         Toast.makeText(this, "Incorrect Password", Toast.LENGTH_SHORT).show()
                     }
