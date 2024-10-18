@@ -141,8 +141,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:text="Last Clicked Image"
             android:fontFamily="serif-monospace"
+            android:text="Last Clicked Image"
             android:textColor="@color/black"
             android:textSize="30sp"
             android:textStyle="bold"
@@ -156,11 +156,12 @@
         <ImageView
             android:id="@+id/lastClickedImage"
             android:layout_width="wrap_content"
-            android:layout_height="250dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_centerInParent="true"
             android:src="@drawable/image"
             android:scaleType="fitXY"
-            android:layout_margin="20dp"/>
+            android:layout_margin="5dp"/>
 
     </LinearLayout>
 

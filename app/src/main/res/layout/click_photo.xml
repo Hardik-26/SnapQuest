@@ -27,9 +27,8 @@
 
     <ImageButton
         android:id="@+id/click"
-        android:layout_width="wrap_content"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:adjustViewBounds="true"
         android:layout_gravity="center"
         android:background="@drawable/button_rounded"
