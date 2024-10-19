@@ -34,7 +34,7 @@ class PreviewActivity : AppCompatActivity() {
     private lateinit var retake: ImageButton
     private lateinit var verify: ImageButton
     private val db = FirebaseFirestore.getInstance()
-    private var apiKey: String? = null
+    var apiKey: String? = "Test"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,17 +46,21 @@ class PreviewActivity : AppCompatActivity() {
         retake = findViewById(R.id.retake)
         verify = findViewById(R.id.verify)
 
-
-        db.collection("Key").document(1.toString()).get()
+        db.collection("Key").document("key").get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
                     apiKey = document.getString("ApiKey")
+                } else {
+                    Toast.makeText(this, "No API Key found", Toast.LENGTH_SHORT).show()
                 }
+            }.addOnFailureListener { e ->
+                Toast.makeText(this, "Error logging in: ${e.message}", Toast.LENGTH_SHORT).show()
             }
+
+
 
         // Load the image from shared preferences
         loadCapturedImage()
-
         // Retake photo
         retake.setOnClickListener {
             val intent = Intent(this, ClickPhotoActivity::class.java)
@@ -102,6 +106,9 @@ class PreviewActivity : AppCompatActivity() {
     private fun loadCapturedImage() {
         val sharedPreferences = getSharedPreferences("task_prefs", MODE_PRIVATE)
         val encodedImage = sharedPreferences.getString("captured_image", null)
+        if (encodedImage != null) {
+            Log.e("Preview_imageUri",encodedImage)
+        }
 
         encodedImage?.let{
             val imageUri=Uri.parse(it)

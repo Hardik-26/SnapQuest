@@ -70,10 +70,12 @@ class LoginActivity : AppCompatActivity() {
                         val intent = Intent(this, TaskActivity::class.java)
                         startActivity(intent)
                         finish()  // Close the login activity
-                    } else {
+                    }
+                    else {
                         Toast.makeText(this, "Incorrect Password", Toast.LENGTH_SHORT).show()
                     }
-                } else {
+                }
+                else {
                     Toast.makeText(this, "Username does not exist", Toast.LENGTH_SHORT).show()
                 }
             }
