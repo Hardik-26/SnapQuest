@@ -61,6 +61,11 @@ class TaskActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        click.setOnClickListener{
+            val intent = Intent(this, ClickPhotoActivity::class.java)
+            startActivity(intent)
+        }
+
         generateTask.setOnClickListener {
             if (canGenerateTask()) {
                 generateNewTask()
@@ -80,6 +85,8 @@ class TaskActivity : AppCompatActivity() {
         // Fetch a random document from Firestore's "Tasks" collection
 
         val randomTaskId = "2" //(1..10).random().toString()
+        sharedPreferences.edit().putString("taskId", randomTaskId).apply()
+
 
         db.collection("Tasks").document(randomTaskId).get()
             .addOnSuccessListener { document ->

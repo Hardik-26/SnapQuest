@@ -46,10 +46,15 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.firebase.firestore.ktx)
+    //noinspection UseTomlInstead
     implementation("androidx.camera:camera-core:1.3.4")
+    //noinspection UseTomlInstead
     implementation("androidx.camera:camera-camera2:1.3.4")
+    //noinspection UseTomlInstead
     implementation("androidx.camera:camera-lifecycle:1.3.4")
+    //noinspection UseTomlInstead
     implementation("androidx.camera:camera-view:1.3.4")
+    //noinspection UseTomlInstead
     implementation("androidx.camera:camera-extensions:1.3.4")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -60,5 +65,8 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     //noinspection GradleDependency,UseTomlInstead
     implementation("com.google.firebase:firebase-auth:22.0.0")
+    //noinspection UseTomlInstead
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+
 
 }
