@@ -34,7 +34,7 @@ class PreviewActivity : AppCompatActivity() {
     private lateinit var retake: ImageButton
     private lateinit var verify: ImageButton
     private val db = FirebaseFirestore.getInstance()
-    private val apiKey = "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"
+    private var apiKey: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +45,14 @@ class PreviewActivity : AppCompatActivity() {
         clickImage = findViewById(R.id.imageClicked)
         retake = findViewById(R.id.retake)
         verify = findViewById(R.id.verify)
+
+
+        db.collection("Key").document(1.toString()).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    apiKey = document.getString("ApiKey")
+                }
+            }
 
         // Load the image from shared preferences
         loadCapturedImage()
