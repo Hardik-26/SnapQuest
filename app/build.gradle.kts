@@ -68,5 +68,13 @@ dependencies {
     //noinspection UseTomlInstead
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
 
+    //noinspection UseTomlInstead
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    //noinspection UseTomlInstead
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    //noinspection UseTomlInstead
+    implementation("com.google.firebase:firebase-storage-ktx:21.0.1")
+
 
 }

@@ -26,8 +26,15 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
+import java.io.InputStream
 
 class ClickPhotoActivity : AppCompatActivity() {
     private lateinit var timerView: TextView
@@ -157,15 +164,20 @@ class ClickPhotoActivity : AppCompatActivity() {
 
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                     // You can retrieve the image path via outputFileResults.savedUri
+                    val image=outputFileResults.savedUri
+                    if (image != null) {
+                        uploadImageToFirebase(image)
+                    }
 
-//                    val bitmap = cameraPreview.bitmap
-//                    bitmap?.let {
-//                        savePhotoToSharedPreferences(it)
+
+//                    image?.let {
+//                        // Convert the image to Base64
+//                        val base64Image = encodeImageToBase64(it)
+////                        Log.e("Click_Photo", base64Image.toString())
+//                        sharedPreferences.edit().putString("EncodedImageForGpt", base64Image).apply()
 //                    }
 
-                    val image=outputFileResults.savedUri
                     sharedPreferences.edit().putString("captured_image", image.toString()).apply()
-
                     // Navigate to the next activity, where the image can be displayed
                     val intent = Intent(this@ClickPhotoActivity, PreviewActivity::class.java)
                     startActivity(intent)
@@ -173,14 +185,64 @@ class ClickPhotoActivity : AppCompatActivity() {
             })
     }
 
-    private fun savePhotoToSharedPreferences(bitmap: Bitmap) {
-        val baos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val byteArray = baos.toByteArray()
-        val encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT)
+    private fun encodeImageToBase64(uri: Uri): String? {
+        try {
+            // Get the input stream from the URI
+            val inputStream: InputStream? = contentResolver.openInputStream(uri)
+            inputStream?.let {
+                val byteArrayOutputStream = ByteArrayOutputStream()
+                val buffer = ByteArray(1024)
+                var length: Int
 
-        // Save the encoded image in SharedPreferences
-        sharedPreferences.edit().putString("captured_image", encodedImage).apply()
+                // Read the input stream and write it to the output stream
+                while (inputStream.read(buffer).also { length = it } != -1) {
+                    byteArrayOutputStream.write(buffer, 0, length)
+                }
+
+                // Convert the output stream to byte array
+                val imageBytes = byteArrayOutputStream.toByteArray()
+
+                // Encode the byte array to Base64
+                return Base64.encodeToString(imageBytes, Base64.DEFAULT)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
+    fun uploadImageToFirebase(uri: Uri) {
+        // Get a reference to the storage service using the default Firebase App
+        val storage: FirebaseStorage = FirebaseStorage.getInstance()
+
+        // Create a storage reference
+        val storageRef: StorageReference = storage.reference
+
+        // Create a reference to "images/<image_name>" where <image_name> can be generated or assigned
+        val imageRef: StorageReference = storageRef.child("${uri.lastPathSegment}")
+
+        // Compress the image
+        var bitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(uri))
+        val compressedImageStream = ByteArrayOutputStream()
+
+        // Compress the bitmap and write to the output stream
+        bitmap=Bitmap.createScaledBitmap(bitmap, 996,472, true)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 35, compressedImageStream) // 75 is the quality
+        val compressedImageData = compressedImageStream.toByteArray()
+
+        // Upload the compressed image to Firebase Storage
+        val uploadTask: UploadTask = imageRef.putBytes(compressedImageData)
+
+        uploadTask.addOnSuccessListener { taskSnapshot ->
+            // Handle successful uploads
+            // You can get the download URL if needed
+            imageRef.downloadUrl.addOnSuccessListener { downloadUri ->
+                Log.e("Chat_URL", "Download URL: $downloadUri")
+                sharedPreferences.edit().putString("EncodedImageForGpt", downloadUri.toString()).apply()
+            }
+        }.addOnFailureListener { exception ->
+            Log.e("Firebase", "Upload failed: ${exception.message}")
+        }
     }
 
     override fun onDestroy() {

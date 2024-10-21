@@ -1,11 +1,10 @@
 package com.example.snapquest
 
+import android.app.VoiceInteractor.Prompt
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Base64
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -14,17 +13,13 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.json.JSONObject
-import java.io.ByteArrayOutputStream
-import okhttp3.*
-import okhttp3.MediaType.Companion.get
-import okhttp3.MediaType.Companion.toMediaType
-import java.io.IOException
 import java.util.Locale
 import java.util.concurrent.TimeUnit
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
 
 
 class PreviewActivity : AppCompatActivity() {
@@ -106,10 +101,6 @@ class PreviewActivity : AppCompatActivity() {
     private fun loadCapturedImage() {
         val sharedPreferences = getSharedPreferences("task_prefs", MODE_PRIVATE)
         val encodedImage = sharedPreferences.getString("captured_image", null)
-        if (encodedImage != null) {
-            Log.e("Preview_imageUri",encodedImage)
-        }
-
         encodedImage?.let{
             val imageUri=Uri.parse(it)
             clickImage.setImageURI(imageUri)
@@ -143,46 +134,87 @@ class PreviewActivity : AppCompatActivity() {
     }
 
     private fun sendToChatGPT(prompt: String, requiredOutput: String) {
-        val sharedPreferences = getSharedPreferences("task_prefs", MODE_PRIVATE)
-        val encodedImage = sharedPreferences.getString("captured_image", null)
-
-        if (encodedImage != null) {
-            val bitmapBytes = Base64.decode(encodedImage, Base64.DEFAULT)
-
-            CoroutineScope(Dispatchers.IO).launch {
-                // Assuming you have a function to make API call
-                val response = callChatGPTApi(prompt, bitmapBytes)
-
-                if (response != null) {
-                    val jsonResponse = JSONObject(response)
-                    val output = jsonResponse.getString("output")
-
-                    // Verify if the response matches the required output
-                    if (output.contains(requiredOutput, ignoreCase = true)) {
-                        // Redirect to PassedActivity
-                        val intent = Intent(this@PreviewActivity, PassedActivity::class.java)
-                        startActivity(intent)
-                    } else {
-                        // Redirect to FailedActivity
-                        val intent = Intent(this@PreviewActivity, FailedActivity::class.java)
-                        startActivity(intent)
-                    }
-                } else {
-                    runOnUiThread {
-                        Toast.makeText(this@PreviewActivity, "Failed to get a response from the API", Toast.LENGTH_SHORT).show()
-                    }
-                }
+        val response= callChatGPTApi(prompt)
+        Log.e("Chat_Response_final",response.toString())
+        if (response != null) {
+            if(response.contains("Yes") || response.contains("Yes.") || response.contains("yes") || response.contains("yes.")){
+                val intent = Intent(this, PassedActivity::class.java)
+                startActivity(intent)
             }
-        } else {
-            Toast.makeText(this, "No image found", Toast.LENGTH_SHORT).show()
+            else{
+                val intent = Intent(this, FailedActivity::class.java)
+                startActivity(intent)
+            }
         }
+
     }
 
-    // Dummy function to send the request to the ChatGPT API, replace with actual implementation
-    private fun callChatGPTApi(prompt: String, imageBytes: ByteArray): String? {
-        // test
-        return TODO("Provide the return value")
+
+
+    fun callChatGPTApi(prompt: String): String? {
+
+        val sharedPreferences = getSharedPreferences("task_prefs", MODE_PRIVATE)
+        val image = sharedPreferences.getString("EncodedImageForGpt", null)
+
+        val curlCommand = arrayOf(
+            "curl", "-X", "POST",
+            "https://api.openai.com/v1/chat/completions",
+            "-H", "Authorization: Bearer $apiKey",
+            "-H", "Content-Type: application/json",
+            "--max-time", "180",
+            "--connect-timeout", "120",
+            "-d", """
+        {
+            "model": "gpt-4o",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "$prompt"
+                        },
+                        {
+                            "type": "image_url",
+                            "image_url": {
+                                "url": "$image"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+        """.trimIndent()
+        )
+        Log.e("Chat_Curl", curlCommand.toString())
+        try {
+            // Create a process builder to execute the curl command
+            val processBuilder = ProcessBuilder(*curlCommand)
+            val process = processBuilder.start()
+            // Capture and print the response
+            val reader = BufferedReader(InputStreamReader(process.inputStream))
+            var line: String?
+            var count=0
+            while (reader.readLine().also { line = it } != null) {
+                if(count==10){
+                    Log.e("Chat_response_Line", line.toString())
+                    break
+                }
+                count += 1
+            }
+            // Wait for the process to finish
+            val exitCode = process.waitFor()
+            Log.e("Chat_response", "Exit code: $exitCode")
+            // Return the response as a string
+            return line.toString()
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return "Null"
     }
+
+
 
     override fun onDestroy() {
         super.onDestroy()
