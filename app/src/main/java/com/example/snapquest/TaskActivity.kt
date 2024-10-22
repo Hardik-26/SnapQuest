@@ -84,11 +84,8 @@ class TaskActivity : AppCompatActivity() {
 
     private fun generateNewTask() {
         // Fetch a random document from Firestore's "Tasks" collection
-
         val randomTaskId = (1..7).random().toString()
         sharedPreferences.edit().putString("taskId", randomTaskId).apply()
-
-
         db.collection("Tasks").document(randomTaskId).get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {

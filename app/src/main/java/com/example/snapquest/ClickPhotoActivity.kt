@@ -169,46 +169,12 @@ class ClickPhotoActivity : AppCompatActivity() {
                         uploadImageToFirebase(image)
                     }
 
-
-//                    image?.let {
-//                        // Convert the image to Base64
-//                        val base64Image = encodeImageToBase64(it)
-////                        Log.e("Click_Photo", base64Image.toString())
-//                        sharedPreferences.edit().putString("EncodedImageForGpt", base64Image).apply()
-//                    }
-
                     sharedPreferences.edit().putString("captured_image", image.toString()).apply()
                     // Navigate to the next activity, where the image can be displayed
                     val intent = Intent(this@ClickPhotoActivity, PreviewActivity::class.java)
                     startActivity(intent)
                 }
             })
-    }
-
-    private fun encodeImageToBase64(uri: Uri): String? {
-        try {
-            // Get the input stream from the URI
-            val inputStream: InputStream? = contentResolver.openInputStream(uri)
-            inputStream?.let {
-                val byteArrayOutputStream = ByteArrayOutputStream()
-                val buffer = ByteArray(1024)
-                var length: Int
-
-                // Read the input stream and write it to the output stream
-                while (inputStream.read(buffer).also { length = it } != -1) {
-                    byteArrayOutputStream.write(buffer, 0, length)
-                }
-
-                // Convert the output stream to byte array
-                val imageBytes = byteArrayOutputStream.toByteArray()
-
-                // Encode the byte array to Base64
-                return Base64.encodeToString(imageBytes, Base64.DEFAULT)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return null
     }
 
     fun uploadImageToFirebase(uri: Uri) {
