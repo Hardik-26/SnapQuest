@@ -138,15 +138,14 @@ class PreviewActivity : AppCompatActivity() {
         Log.e("Chat_Response_final",response.toString())
         if (response != null) {
             if(response.contains("Yes") || response.contains("Yes.") || response.contains("yes") || response.contains("yes.")){
-                val intent = Intent(this, PassedActivity::class.java)
+                val intent = Intent(this@PreviewActivity, PassedActivity::class.java)
                 startActivity(intent)
             }
             else{
-                val intent = Intent(this, FailedActivity::class.java)
+                val intent = Intent(this@PreviewActivity, FailedActivity::class.java)
                 startActivity(intent)
             }
         }
-
     }
 
 
