@@ -64,6 +64,7 @@ class TaskActivity : AppCompatActivity() {
         click.setOnClickListener{
             val intent = Intent(this, ClickPhotoActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         generateTask.setOnClickListener {
@@ -113,6 +114,14 @@ class TaskActivity : AppCompatActivity() {
     }
 
     private fun startTimer(durationMillis: Long) {
+        val sharedPreferences = getSharedPreferences("task_prefs", MODE_PRIVATE)
+        // Check if the global timer was stopped
+        val isTimerStopped = sharedPreferences.getBoolean("is_timer_stopped", false)
+        if (isTimerStopped) {
+            // If the timer is stopped, don't start a new one
+            timerView.text = "5:00"
+            return
+        }
         timer?.cancel() // Cancel any previous timer if running
 
         timer = object : CountDownTimer(durationMillis, 1000) {

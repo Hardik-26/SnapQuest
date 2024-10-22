@@ -1,10 +1,14 @@
 package com.example.snapquest
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
+import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -17,11 +21,13 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var name: TextView
     private lateinit var points: TextView
     private lateinit var lastClickedImage: ImageView
+    private lateinit var back: Button
 
     private val db = FirebaseFirestore.getInstance()
     private val PREFERENCES_NAME = "login_prefs"
     private val PREF_USERNAME = "username"
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -30,6 +36,15 @@ class ProfileActivity : AppCompatActivity() {
         name = findViewById(R.id.name)
         points = findViewById(R.id.points)
         lastClickedImage = findViewById(R.id.lastClickedImage)
+        back= findViewById(R.id.backBut)
+
+        lastClickedImage.visibility = View.INVISIBLE
+
+        back.setOnClickListener {
+            val intent = Intent(this,TaskActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
         // Retrieve the username from SharedPreferences
         val sharedPreferences = getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)

@@ -64,6 +64,7 @@ class PreviewActivity : AppCompatActivity() {
 
         // Verify photo
         verify.setOnClickListener {
+            stopGlobalTimer()
             verifyPhoto()
         }
         val sharedPreferences = getSharedPreferences("task_prefs", MODE_PRIVATE)
@@ -82,7 +83,6 @@ class PreviewActivity : AppCompatActivity() {
                 val minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)
                 val seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % 60
                 timerView.text = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
-
                 // Save remaining time to SharedPreferences to persist the timer state
                 sharedPreferences.edit().putLong("timer_remaining", millisUntilFinished).apply()
             }
@@ -139,11 +139,16 @@ class PreviewActivity : AppCompatActivity() {
         if (response != null) {
             if(response.contains("Yes") || response.contains("Yes.") || response.contains("yes") || response.contains("yes.")){
                 val intent = Intent(this@PreviewActivity, PassedActivity::class.java)
+                val sharedPreferences = getSharedPreferences("task_prefs", MODE_PRIVATE)
+                val time = sharedPreferences.getLong("timer_remaining", 0)
+                intent.putExtra("time", time)
                 startActivity(intent)
+                finish()
             }
             else{
                 val intent = Intent(this@PreviewActivity, FailedActivity::class.java)
                 startActivity(intent)
+                finish()
             }
         }
     }
@@ -213,6 +218,12 @@ class PreviewActivity : AppCompatActivity() {
         return "Null"
     }
 
+    private fun stopGlobalTimer() {
+        val sharedPreferences = getSharedPreferences("task_prefs", MODE_PRIVATE)
+        sharedPreferences.edit().putBoolean("is_timer_stopped", true).apply()
+        // Cancel the local timer if running
+        timer?.cancel()
+    }
 
 
     override fun onDestroy() {

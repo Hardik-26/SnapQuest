@@ -50,7 +50,7 @@ class PassedActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun adjustPointsBasedOnTimeRemaining(username: String, sharedPreferences: SharedPreferences) {
         // Retrieve time remaining and total allowed time from SharedPreferences
-        val timeRemaining = sharedPreferences.getLong("time_remaining", 0)/1000 // in seconds
+        val timeRemaining = (intent.getLongExtra("time",0))/1000
         Log.e("PassedActivity", "Time Remaining: $timeRemaining")
         val totalAllowedTime = 300
 
